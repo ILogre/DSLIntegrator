@@ -2,7 +2,7 @@ package fr.unice.i3s.dslintegrator
 
 import fr.unice.i3s.dslintegrator.domains.compovisu.mm.Dashboard
 import fr.unice.i3s.dslintegrator.domains.{Model}
-import fr.unice.i3s.dslintegrator.domains.compovisu.service.{DDHistory, DashboardDesign, addVisu, addData}
+import fr.unice.i3s.dslintegrator.domains.compovisu.service.{DDPersistence, DashboardDesign, addVisu, addData}
 import fr.unice.i3s.dslintegrator.domains.datacenter.service.{DataCenter, DBModel, addResource}
 
 import scala.collection.mutable._
@@ -14,22 +14,22 @@ object Engine {
       case c  : addData => {
         val dashboard = c.target.version.head.asInstanceOf[Dashboard]
         DashboardDesign.addData(c)
-        val newDashboard = DDHistory.models.get(c.dashboardName).get.version.head
+        val newDashboard = DDPersistence.models.get(c.dashboardName).get.version.head
         if ( Association.hasPair(c.target) ) {
           val database = Association.getLinked(c.target).asInstanceOf[DBModel].version.head
-          if (!database.isDefined(c.uri)) database.updateState("Ressource needed : " + c.uri)
-          else newDashboard.updateLog("Link between "+ c.uri + " and " + c.visuName + " : OK") }
-        else newDashboard.updateLog("Data "+ c.uri + " for " + c.visuName + " : OK, but no association detected with a resource catalog \n ---> No integration possible !")}
+          if (!database.isDefined(c.uri)) database.notify("Ressource needed : " + c.uri)
+          else newDashboard.log("Link between "+ c.uri + " and " + c.visuName + " : OK") }
+        else newDashboard.log("Data "+ c.uri + " for " + c.visuName + " : OK, but no association detected with a resource catalog \n ---> No integration possible !")}
 
       case c  : addVisu => {
         DashboardDesign.addVisu(c.dashboardName,c.visuName,c.concerns:_*) // todo : return the new model to replace c.target
-        DDHistory.models.get(c.dashboardName).get.version.head.updateLog("Visu "+ c.visuName +" declaration : OK" )
+        DDPersistence.models.get(c.dashboardName).get.version.head.log("Visu "+ c.visuName +" declaration : OK" )
       }
 
 
       case c  : addResource =>
         DataCenter.addResource(c.catalogName,c.uri,c.semantic,c.elements:_*)
-        c.target.version.head.updateLog("Resource "+ c.uri +" declaration : OK" )
+        c.target.version.head.log("Resource "+ c.uri +" declaration : OK" )
 
 
       case other => throw new Exception("Unhandled operation")

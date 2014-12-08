@@ -13,10 +13,10 @@ import fr.unice.i3s.dslintegrator.domains.Model
  class DashboardDesign extends Service {
   // Allows one to add a new visualization to a dashboard, specifying its name and concerns
   def addVisu(dashboardName: String, visuName: String, concerns: String*) = {
-    val model = DDHistory.models.get(dashboardName).get
+    val model = DDPersistence.models.get(dashboardName).get
     val lastDashboard = model.version.head
 
-    DDHistory updateModel new DDModel(model.name, lastDashboard.addVisu(visuName, concerns: _*) :: model.version)
+    DDPersistence updateModel new DDModel(model.name, lastDashboard.addVisu(visuName, concerns: _*) :: model.version)
   }
 
   // Allows one to link a data to an existing visualization,
@@ -32,14 +32,14 @@ import fr.unice.i3s.dslintegrator.domains.Model
   }*/
 
   val addData = new Function1[addData, DDModel] with Operation{
-    override def apply(v1: addData): Model = {
-      val model = DDHistory.models.get(v1.dashboardName).get
+    override def apply(v1: addData): DDModel = {
+      val model = DDPersistence.models.get(v1.dashboardName).get
       val lastDashboard = model.version.head
       val visu = lastDashboard.getVisuByName(v1.visuName)
       val newVisu = visu.addData(v1.uri, v1.concerns: _*)
       val newDashboard = lastDashboard.removeVisu(visu).addVisu(newVisu)
       val newVersion = new DDModel(model.name, newDashboard :: model.version)
-      DDHistory updateModel newVersion
+      DDPersistence updateModel newVersion
       newVersion
     }
   }
@@ -51,8 +51,8 @@ object DashboardDesign extends DashboardDesign
 // Exposed
 
 case class addVisu(dashboardName : String, visuName: String, concerns: String*) extends Message {
-  override val target: Model = DDHistory.models.get(dashboardName).get
+  override val target: Model = DDPersistence.models.get(dashboardName).get
 }
 case class addData(dashboardName : String, visuName: String, uri: String, concerns: String*) extends Message{
-  override val target: Model = DDHistory.models.get(dashboardName).get
+  override val target: Model = DDPersistence.models.get(dashboardName).get
 }

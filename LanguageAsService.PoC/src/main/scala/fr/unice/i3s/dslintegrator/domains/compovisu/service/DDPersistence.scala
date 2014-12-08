@@ -7,7 +7,7 @@ import scala.collection.immutable.HashMap
 /**
  * Created by ivan on 02/12/2014.
  */
-object DDHistory{
+object DDPersistence{
   var models = new HashMap[String,DDModel]()
 
   def updateModel(m : DDModel) ={
@@ -22,7 +22,7 @@ object DDHistory{
 class DDModel(val name: String,val version: List[Dashboard] ) extends Model { // todo : version
   def this(name:String) = {
     this(name,List(new Dashboard(name)))
-    DDHistory updateModel this
+    DDPersistence updateModel this
   }
 }
 

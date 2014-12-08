@@ -1,7 +1,7 @@
 package fr.unice.i3s.dslintegrator
 
-import fr.unice.i3s.dslintegrator.domains.compovisu.service.{DDHistory, addData, addVisu, DDModel}
-import fr.unice.i3s.dslintegrator.domains.datacenter.service.{DBHistory, addResource, DBModel}
+import fr.unice.i3s.dslintegrator.domains.compovisu.service.{DDPersistence, addData, addVisu, DDModel}
+import fr.unice.i3s.dslintegrator.domains.datacenter.service.{DBPersistence, addResource, DBModel}
 
 /**
  * Created by ivan on 02/12/2014.
@@ -23,7 +23,7 @@ object main extends App{
   // Some trace to verify what's going on
   println("phase 1 ")
   // roles are not suppose to access the history of models, but for debug it's necessary ;)
-  val ddUpdated_1 = DDHistory.models.get(ddName).get.version.head
+  val ddUpdated_1 = DDPersistence.models.get(ddName).get.version.head
   println(ddUpdated_1)
 
 
@@ -34,8 +34,8 @@ object main extends App{
   // Some trace to verify what's going on
   println("phase 2 ")
   // roles are not suppose to access the history of models, but for debug it's necessary ;)
-  val ddUpdated_2 = DDHistory.models.get(ddName).get.version.head
-  val dbUpdated_2 = DBHistory.models.get(dbName).get.version.head
+  val ddUpdated_2 = DDPersistence.models.get(ddName).get.version.head
+  val dbUpdated_2 = DBPersistence.models.get(dbName).get.version.head
   println(ddUpdated_2)
   println(dbUpdated_2)
 }

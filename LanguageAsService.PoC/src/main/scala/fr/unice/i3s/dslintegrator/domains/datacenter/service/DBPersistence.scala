@@ -7,7 +7,7 @@ import scala.collection.immutable.HashMap
 /**
  * Created by ivan on 02/12/2014.
  */
-object DBHistory{
+object DBPersistence{
   var models = new HashMap[String,DBModel]()
 
   def addModel(m : DBModel) ={
@@ -20,6 +20,6 @@ object DBHistory{
 class DBModel(val name: String, val version: List[Catalog]) extends Model {
   def this(name:String) = {
     this(name,List(new Catalog(name)))
-    DBHistory addModel this
+    DBPersistence addModel this
   }
 }

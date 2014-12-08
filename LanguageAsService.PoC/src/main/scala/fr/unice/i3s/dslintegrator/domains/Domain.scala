@@ -1,9 +1,9 @@
 package fr.unice.i3s.dslintegrator.domains
 
 trait Domain {
-  var notification : String = "\n" //todo : immutable
-  var log : String = "\n"
+  val notification : String = "\n" //todo : immutable
+  val log : String = "\n"
 
-  def updateState(s: String) = notification = notification+"\t"+s+"\n"
-  def updateLog(s: String) = log = log+"\t"+s+"\n"
+  def notify(s: String):Domain
+  def log(s: String):Domain
 }
