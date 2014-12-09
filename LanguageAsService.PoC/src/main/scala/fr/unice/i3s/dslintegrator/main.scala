@@ -14,7 +14,7 @@ object main extends App{
   // creation of a new dashboard and a new database to work on
   val ddhist = new DDModel(ddName)
   val dbhist = new DBModel(dbName)
-  Association.link(ddhist,dbhist)
+  Engine(link(ddhist,dbhist))
   
   // As a data manager, I define a new resource to be used
   val call = addResource(dbName,"http://users.polytech.unice.fr/~logre/resources/air_temp.senml","Outside temperature in °C",("t","numerical"),("v","numerical"))

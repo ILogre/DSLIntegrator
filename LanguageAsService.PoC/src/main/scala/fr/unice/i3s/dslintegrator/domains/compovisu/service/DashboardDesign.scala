@@ -1,6 +1,6 @@
 package fr.unice.i3s.dslintegrator.domains.compovisu.service
 
-import fr.unice.i3s.dslintegrator.{Operation, Service, Message}
+import fr.unice.i3s.dslintegrator.{MessageFun, Operation, Service, Message}
 import fr.unice.i3s.dslintegrator.domains.Model
 
 /**
@@ -44,9 +44,9 @@ object DashboardDesign extends DashboardDesign
 
 // Exposed
 
-case class addVisu(dashboardName : String, visuName: String, concerns: String*) extends Message {
+case class addVisu(dashboardName : String, visuName: String, concerns: String*) extends MessageFun {
   override val target: Model = DDPersistence.models.get(dashboardName).get
 }
-case class addData(dashboardName : String, visuName: String, uri: String, concerns: String*) extends Message{
+case class addData(dashboardName : String, visuName: String, uri: String, concerns: String*) extends MessageFun{
   override val target: Model = DDPersistence.models.get(dashboardName).get
 }

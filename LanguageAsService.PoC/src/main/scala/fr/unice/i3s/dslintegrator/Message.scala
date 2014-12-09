@@ -5,6 +5,16 @@ import fr.unice.i3s.dslintegrator.domains.Model
 /**
  * Created by ivan on 02/12/2014.
  */
-trait Message {
-    val target : Model
+trait Message
+
+trait MessageFun extends Message{
+  val target : Model
+}
+
+trait Answer extends Message {
+  val answer : Any
+}
+
+object EmptyAnswer extends Answer {
+  override val answer: Any = null
 }

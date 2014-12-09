@@ -1,6 +1,6 @@
 package fr.unice.i3s.dslintegrator.domains.datacenter.service
 
-import fr.unice.i3s.dslintegrator.{Operation, Service, Message}
+import fr.unice.i3s.dslintegrator.{MessageFun, Operation, Service, Message}
 import fr.unice.i3s.dslintegrator.domains.Model
 
 /**
@@ -41,6 +41,6 @@ object DataCenter extends DataCenter
 
 // Exposed
 
-case class addResource(catalogName : String, uri: String, semantic: String, elements: (String, String)*) extends Message{
+case class addResource(catalogName : String, uri: String, semantic: String, elements: (String, String)*) extends MessageFun{
   override val target: Model = DBPersistence.models.get(catalogName).get
 }
