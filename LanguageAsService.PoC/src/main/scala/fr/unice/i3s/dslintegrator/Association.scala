@@ -8,11 +8,8 @@ import scala.collection.mutable.MutableList
 /**
  * Created by ivan on 09/12/2014.
  */
-private object Association {
+private object Association extends Service{
   val asso : MutableList[Pair] = MutableList()
-}
-
-class Association extends Service {
 
   val link = new Function1[link, linkAnswer] with Operation {
     override def apply(v1: link): linkAnswer = {

@@ -22,4 +22,7 @@ trait Model {
       that.name.equals(this.name)
     case _ => false
   }
+
+  def updateLast(m:Domain) : Model
+  def append(m:Domain) : Model
 }

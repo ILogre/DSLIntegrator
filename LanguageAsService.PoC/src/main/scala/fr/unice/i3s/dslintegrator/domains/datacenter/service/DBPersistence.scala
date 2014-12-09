@@ -1,7 +1,7 @@
 package fr.unice.i3s.dslintegrator.domains.datacenter.service
 
 import fr.unice.i3s.dslintegrator.domains.datacenter.mm.Catalog
-import fr.unice.i3s.dslintegrator.domains.{ Model}
+import fr.unice.i3s.dslintegrator.domains.{Domain, Model}
 import scala.collection.immutable.HashMap
 
 /**
@@ -18,8 +18,20 @@ object DBPersistence{
 }
 
 class DBModel(val name: String, val version: List[Catalog]) extends Model {
+  DBPersistence addModel this
   def this(name:String) = {
     this(name,List(new Catalog(name)))
-    DBPersistence addModel this
+  }
+
+  override def updateLast(m: Domain): DBModel = {
+    if (m.isInstanceOf[Catalog])
+      new DBModel(name,m.asInstanceOf[Catalog]::version.drop(0))
+    else throw new Exception //todo
+  }
+
+  override def append(m: Domain): DBModel = {
+    if (m.isInstanceOf[Catalog])
+      new DBModel(name,m.asInstanceOf[Catalog]::version)
+    else throw new Exception //todo
   }
 }

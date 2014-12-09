@@ -19,10 +19,7 @@ class DataCenter extends Service {
       val model = DBPersistence.models.get(v1.catalogName).get
       val lastCatalog = model.version.head
       val newCatalog = lastCatalog.addResource(v1.uri, v1.semantic, v1.elements: _*)
-      val newListCatalog = newCatalog :: model.version
-      val newVersion = new DBModel(model.name, newListCatalog)
-      DBPersistence addModel newVersion
-      newVersion
+      model.append(newCatalog)
     }
   }
 

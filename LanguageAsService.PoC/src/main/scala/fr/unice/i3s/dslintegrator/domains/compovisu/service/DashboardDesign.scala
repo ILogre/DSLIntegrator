@@ -17,9 +17,7 @@ import fr.unice.i3s.dslintegrator.domains.Model
     override def apply(v1: addVisu): DDModel = {
       val model = DDPersistence.models.get(v1.dashboardName).get
       val lastDashboard = model.version.head
-      val newVersion = new DDModel(model.name, lastDashboard.addVisu(v1.visuName, v1.concerns: _*) :: model.version)
-      DDPersistence updateModel newVersion
-      newVersion
+      model.append(lastDashboard.addVisu(v1.visuName, v1.concerns: _*))
     }
   }
 
@@ -32,9 +30,7 @@ import fr.unice.i3s.dslintegrator.domains.Model
       val visu = lastDashboard.getVisuByName(v1.visuName)
       val newVisu = visu.addData(v1.uri, v1.concerns: _*)
       val newDashboard = lastDashboard.removeVisu(visu).addVisu(newVisu)
-      val newVersion = new DDModel(model.name, newDashboard :: model.version)
-      DDPersistence updateModel newVersion
-      newVersion
+      model.append(newDashboard)
     }
   }
 }

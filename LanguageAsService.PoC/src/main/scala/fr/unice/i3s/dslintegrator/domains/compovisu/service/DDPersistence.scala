@@ -1,7 +1,7 @@
 package fr.unice.i3s.dslintegrator.domains.compovisu.service
 
 import fr.unice.i3s.dslintegrator.domains.compovisu.mm.Dashboard
-import fr.unice.i3s.dslintegrator.domains.{Model}
+import fr.unice.i3s.dslintegrator.domains.{Domain, Model}
 import scala.collection.immutable.HashMap
 
 /**
@@ -20,9 +20,21 @@ object DDPersistence{
 }
 
 class DDModel(val name: String,val version: List[Dashboard] ) extends Model { // todo : version
+  DDPersistence updateModel this
   def this(name:String) = {
     this(name,List(new Dashboard(name)))
-    DDPersistence updateModel this
+  }
+
+  override def updateLast(m: Domain): DDModel = {
+    if (m.isInstanceOf[Dashboard])
+      new DDModel(name,m.asInstanceOf[Dashboard]::version.drop(0))
+    else throw new Exception //todo
+  }
+
+  override def append(m: Domain): DDModel = {
+    if (m.isInstanceOf[Dashboard])
+      new DDModel(name,m.asInstanceOf[Dashboard]::version)
+    else throw new Exception //todo
   }
 }
 
