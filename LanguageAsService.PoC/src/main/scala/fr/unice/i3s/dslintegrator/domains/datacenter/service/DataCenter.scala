@@ -1,8 +1,6 @@
 package fr.unice.i3s.dslintegrator.domains.datacenter.service
 
-import fr.unice.i3s.dslintegrator.{Service, Message}
-import fr.unice.i3s.dslintegrator.domains.compovisu.mm.Dashboard
-import fr.unice.i3s.dslintegrator.domains.compovisu.service.{DDModel, DDPersistence}
+import fr.unice.i3s.dslintegrator.{Operation, Service, Message}
 import fr.unice.i3s.dslintegrator.domains.Model
 
 /**
@@ -12,26 +10,30 @@ import fr.unice.i3s.dslintegrator.domains.Model
  *  addResource
  *  isDefined
  */
-class DataCenter extends Service{
+class DataCenter extends Service {
 
   // Allows one to add a new resource to a catalog
   // specifying its unique uri, its semantic and of which element it is composed
-  def addResource(catalogName : String, uri: String, semantic: String, elements: (String, String)*) = {
-    val model = DBPersistence.models.get(catalogName).get
-    val lastCatalog = model.version.head
-    val newCatalog = lastCatalog.addResource(uri, semantic, elements : _*)
-    val newListCatalog = newCatalog :: model.version
-    DBPersistence addModel new DBModel(model.name,newListCatalog)
-
+  val addResource = new Function1[addResource, DBModel] with Operation {
+    override def apply(v1: addResource): DBModel = {
+      val model = DBPersistence.models.get(v1.catalogName).get
+      val lastCatalog = model.version.head
+      val newCatalog = lastCatalog.addResource(v1.uri, v1.semantic, v1.elements: _*)
+      val newListCatalog = newCatalog :: model.version
+      val newVersion = new DBModel(model.name, newListCatalog)
+      DBPersistence addModel newVersion
+      newVersion
+    }
   }
 
   // Allows one to check the existence of a given resource in a catalog
-  def isDefined(catalogName : String, uri : String) : Boolean = {
-    val model = DBPersistence.models.get(catalogName).get
-    val lastCatalog = model.version.head
-    lastCatalog.isDefined(uri)
+  val isDefined = new Function1[addResource, Boolean] with Operation {
+    override def apply(v1: addResource): Boolean = {
+      val model = DBPersistence.models.get(v1.catalogName).get
+      val lastCatalog = model.version.head
+      lastCatalog.isDefined(v1.uri)
+    }
   }
-
 }
 
 object DataCenter extends DataCenter

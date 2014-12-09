@@ -2,8 +2,6 @@ package fr.unice.i3s.dslintegrator.domains.compovisu.mm
 
 import fr.unice.i3s.dslintegrator.domains.{Domain, MMConcept}
 
-import scala.collection.immutable.Stream.Empty
-
 class Dashboard(val name: String, val visus: List[Visualization] = List(), override val log:String = "\n", override val notification:String = "\n") extends MMConcept with Domain{
 
   def addVisu(visuName: String, concerns: String*): Dashboard = {

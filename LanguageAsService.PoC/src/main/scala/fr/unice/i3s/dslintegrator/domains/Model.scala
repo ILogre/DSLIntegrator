@@ -1,8 +1,5 @@
 package fr.unice.i3s.dslintegrator.domains
 
-import scala.collection.immutable.HashMap
-import scala.collection.mutable.ListBuffer
-
 /**
  * Created by ivan on 01/12/2014.
  * Abstract representation of the object storage and querying,

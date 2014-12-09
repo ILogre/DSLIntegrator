@@ -11,26 +11,20 @@ import fr.unice.i3s.dslintegrator.domains.Model
  *  addData
  */
  class DashboardDesign extends Service {
-  // Allows one to add a new visualization to a dashboard, specifying its name and concerns
-  def addVisu(dashboardName: String, visuName: String, concerns: String*) = {
-    val model = DDPersistence.models.get(dashboardName).get
-    val lastDashboard = model.version.head
 
-    DDPersistence updateModel new DDModel(model.name, lastDashboard.addVisu(visuName, concerns: _*) :: model.version)
+  // Allows one to add a new visualization to a dashboard, specifying its name and concerns
+  val addVisu = new Function1[addVisu, DDModel] with Operation{
+    override def apply(v1: addVisu): DDModel = {
+      val model = DDPersistence.models.get(v1.dashboardName).get
+      val lastDashboard = model.version.head
+      val newVersion = new DDModel(model.name, lastDashboard.addVisu(v1.visuName, v1.concerns: _*) :: model.version)
+      DDPersistence updateModel newVersion
+      newVersion
+    }
   }
 
-  // Allows one to link a data to an existing visualization,
-  // specifying its unique uri and concerns
- /* def addData(dashboardName: String, visuName: String, uri: String, concerns: String*) = {
-    val model = DDHistory.models.get(dashboardName).get
-    val lastDashboard = model.states.head
-    val visu = lastDashboard.getVisuByName(visuName)
-    val newVisu = visu.addData(uri, concerns: _*)
-    val newDashboard = lastDashboard.removeVisu(visu).addVisu(newVisu)
-
-    DDHistory addModel new DDModel(model.name, newDashboard :: model.states)
-  }*/
-
+ // Allows one to link a data to an existing visualization,
+ // specifying its unique uri and concerns
   val addData = new Function1[addData, DDModel] with Operation{
     override def apply(v1: addData): DDModel = {
       val model = DDPersistence.models.get(v1.dashboardName).get

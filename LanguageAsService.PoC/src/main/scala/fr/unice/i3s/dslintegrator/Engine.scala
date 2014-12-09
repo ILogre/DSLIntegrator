@@ -22,13 +22,13 @@ object Engine {
         else newDashboard.log("Data "+ c.uri + " for " + c.visuName + " : OK, but no association detected with a resource catalog \n ---> No integration possible !")}
 
       case c  : addVisu => {
-        DashboardDesign.addVisu(c.dashboardName,c.visuName,c.concerns:_*) // todo : return the new model to replace c.target
+        DashboardDesign.addVisu(c) // todo : return the new model to replace c.target
         DDPersistence.models.get(c.dashboardName).get.version.head.log("Visu "+ c.visuName +" declaration : OK" )
       }
 
 
       case c  : addResource =>
-        DataCenter.addResource(c.catalogName,c.uri,c.semantic,c.elements:_*)
+        DataCenter.addResource(c)
         c.target.version.head.log("Resource "+ c.uri +" declaration : OK" )
 
 
