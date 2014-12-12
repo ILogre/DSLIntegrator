@@ -1,5 +1,6 @@
 package fr.unice.i3s.dslintegrator.domains.compovisu.service
 
+import fr.unice.i3s.dslintegrator.Message
 import fr.unice.i3s.dslintegrator.domains.compovisu.mm.Dashboard
 import fr.unice.i3s.dslintegrator.domains.{Domain, Model}
 import scala.collection.immutable.HashMap
@@ -37,4 +38,5 @@ class DDModel(val name: String,val version: List[Dashboard] ) extends Model { //
     else throw new Exception //todo
   }
 }
+
 

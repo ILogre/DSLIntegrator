@@ -1,5 +1,6 @@
 package fr.unice.i3s.dslintegrator.domains.datacenter.service
 
+import fr.unice.i3s.dslintegrator.{Service, Message}
 import fr.unice.i3s.dslintegrator.domains.datacenter.mm.Catalog
 import fr.unice.i3s.dslintegrator.domains.{Domain, Model}
 import scala.collection.immutable.HashMap

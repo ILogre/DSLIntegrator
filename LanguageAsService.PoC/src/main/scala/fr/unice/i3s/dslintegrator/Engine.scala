@@ -2,8 +2,8 @@ package fr.unice.i3s.dslintegrator
 
 import fr.unice.i3s.dslintegrator.domains.{Domain, Model}
 import fr.unice.i3s.dslintegrator.domains.compovisu.mm.Dashboard
-import fr.unice.i3s.dslintegrator.domains.compovisu.service.{DashboardDesign, addVisu, addData}
-import fr.unice.i3s.dslintegrator.domains.datacenter.service.{DataCenter, DBModel, addResource,DBPersistence}
+import fr.unice.i3s.dslintegrator.domains.compovisu.service._
+import fr.unice.i3s.dslintegrator.domains.datacenter.service._
 
 
 object Engine {
@@ -54,6 +54,14 @@ object Engine {
 
       case c : getLinked =>
         Association.getLinked(c)
+
+      case c : declareDatabase =>
+        DataCenter.declareDatabase(c)
+        EmptyAnswer //todo personalize the return type
+
+      case c : declareDashboard =>
+        DashboardDesign.declareDashboard(c)
+        EmptyAnswer //todo personalize the return type
 
       case other => throw new Exception("Unhandled operation")
     }

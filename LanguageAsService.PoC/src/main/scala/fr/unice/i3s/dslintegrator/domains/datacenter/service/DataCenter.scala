@@ -12,6 +12,14 @@ import fr.unice.i3s.dslintegrator.domains.Model
  */
 class DataCenter extends Service {
 
+  // Allows one to initialize a catalog instance
+  // one needs to specify its name
+  //it's by default empty of resources
+  val declareDatabase = new Function1[declareDatabase,DBModel] with Operation {
+    override def apply(v1: declareDatabase): DBModel =
+      new DBModel(v1.name)
+  }
+
   // Allows one to add a new resource to a catalog
   // specifying its unique uri, its semantic and of which element it is composed
   val addResource = new Function1[addResource, DBModel] with Operation {
@@ -37,6 +45,8 @@ object DataCenter extends DataCenter
 
 
 // Exposed
+
+case class declareDatabase(name : String) extends Message
 
 case class addResource(catalogName : String, uri: String, semantic: String, elements: (String, String)*) extends MessageFun{
   override val target: Model = DBPersistence.models.get(catalogName).get

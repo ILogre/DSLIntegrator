@@ -12,6 +12,14 @@ import fr.unice.i3s.dslintegrator.domains.Model
  */
  class DashboardDesign extends Service {
 
+  // Allows one to initialize a Dashboard instance
+  // one needs to specify its name
+  //it's by default empty of visualization
+  val declareDashboard = new Function1[declareDashboard,DDModel] with Operation {
+    override def apply(v1: declareDashboard): DDModel =
+      new DDModel(v1.name)
+  }
+
   // Allows one to add a new visualization to a dashboard, specifying its name and concerns
   val addVisu = new Function1[addVisu, DDModel] with Operation{
     override def apply(v1: addVisu): DDModel = {
@@ -39,6 +47,8 @@ object DashboardDesign extends DashboardDesign
 
 
 // Exposed
+
+case class declareDashboard(name : String) extends Message
 
 case class addVisu(dashboardName : String, visuName: String, concerns: String*) extends MessageFun {
   override val target: Model = DDPersistence.models.get(dashboardName).get
