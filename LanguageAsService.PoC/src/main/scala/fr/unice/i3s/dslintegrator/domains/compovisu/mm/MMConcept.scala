@@ -24,7 +24,7 @@ class Dashboard(val name: String, val visus: List[Visualization] = List(), overr
   }
 
   override def toString() = {
-    "\nDashboard " + this.name + " { \n\tVisualizations "+visus+"\n}\n"+log+notification
+    "\nDashboard " + this.name + " { \n\tVisualizations "+visus+"\n}"+log+notification
   }
   override def notify(s: String): Dashboard = {
     new Dashboard(this.name,this.visus, this.log, this.notification+"\n"+s)

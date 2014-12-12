@@ -23,8 +23,8 @@ object main extends App{
   // Some trace to verify what's going on
   println("phase 1 ")
   // roles are not suppose to access the history of models, but for debug it's necessary ;)
-  val ddUpdated_1 = DDPersistence.models.get(ddName).get.version.head
-  println(ddUpdated_1)
+  val dbUpdated_1 = DBPersistence.models.get(dbName).get.version.head
+  println(dbUpdated_1)
 
 
   // As a dashboard designer, I fill my dashboard with a new visualization and link it with some data

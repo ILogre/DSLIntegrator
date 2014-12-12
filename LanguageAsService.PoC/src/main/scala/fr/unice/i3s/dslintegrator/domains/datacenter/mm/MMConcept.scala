@@ -9,7 +9,7 @@ class Catalog(name: String, val ress: List[Resource] = List(),override val log:S
   }
   def isDefined(uri : String) : Boolean = !this.ress.filter(r => r.uri == uri ).isEmpty
 
-  override def toString() = "\nCatalog " + this.name + " { \n\tResources "+ress+"\n}\n"+log+notification
+  override def toString() = "\nCatalog " + this.name + " { \n\tResources "+ress+"\n}"+log+notification
 
   override def notify(s: String): Catalog = new Catalog(name, ress, log, notification+"\n"+s)
 

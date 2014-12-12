@@ -3,17 +3,17 @@ package fr.unice.i3s.dslintegrator
 import fr.unice.i3s.dslintegrator.domains.Model
 import fr.unice.i3s.dslintegrator.domains.compovisu.mm.Dashboard
 
-import scala.collection.mutable.MutableList
+import scala.collection.mutable.{ListBuffer, MutableList}
 
 /**
  * Created by ivan on 09/12/2014.
  */
 private object Association extends Service{
-  val asso : MutableList[Pair] = MutableList()
+  val asso : ListBuffer[Pair] = ListBuffer()
 
   val link = new Function1[link, linkAnswer] with Operation {
     override def apply(v1: link): linkAnswer = {
-      if ( ! v1.s1.isInstanceOf[Dashboard] & v1.s2.isInstanceOf[Dashboard] ) {
+      if ( ! ( v1.s1.isInstanceOf[Dashboard] & v1.s2.isInstanceOf[Dashboard])  ) {
         val p: Pair = new Pair(v1.s1, v1.s2)
         if (!known(p))
           Association.asso.+=:(p)
@@ -24,13 +24,26 @@ private object Association extends Service{
     }
   }
 
+  val unlink = new Function1[unlink, unlinkAnswer] with Operation {
+    override def apply(v1: unlink): unlinkAnswer = {
+      val p: Pair = new Pair(v1.s1, v1.s2)
+      if (known(p)){
+        Association.asso.remove(Association.asso.indexOf(p))
+        new unlinkAnswer(v1.s1, v1.s2, true)
+      }
+      else new unlinkAnswer(v1.s1, v1.s2, false)
+
+    }
+  }
+
   val hasLinked =  new Function1[hasLinked, hasLinkedAnswer] with Operation {
     override def apply(v1: hasLinked): hasLinkedAnswer = {
       def iterGetLinked(m : Model, l:List[Pair]):Boolean = l match {
         case head::tail => head.contains(m) ||  iterGetLinked(m,tail)
         case _ => false
       }
-      new hasLinkedAnswer(v1.s, iterGetLinked(v1.s,Association.asso.toList) )
+      val bool = iterGetLinked(v1.s,Association.asso.toList)
+      new hasLinkedAnswer(v1.s, bool )
     }
   }
 
@@ -81,6 +94,11 @@ class Pair(val model1 : Model,val model2 : Model) {
 
 case class link(s1:Model, s2 : Model) extends Message
 case class linkAnswer(s1:Model, s2 : Model, a:Boolean) extends Answer{
+  override val answer: Boolean = a
+}
+
+case class unlink(s1:Model, s2 : Model) extends Message
+case class unlinkAnswer(s1:Model, s2 : Model, a:Boolean) extends Answer{
   override val answer: Boolean = a
 }
 
