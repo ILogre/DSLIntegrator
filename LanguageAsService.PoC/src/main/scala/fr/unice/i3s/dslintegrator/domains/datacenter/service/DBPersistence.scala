@@ -1,6 +1,5 @@
 package fr.unice.i3s.dslintegrator.domains.datacenter.service
 
-import fr.unice.i3s.dslintegrator.{Service, Message}
 import fr.unice.i3s.dslintegrator.domains.datacenter.mm.Catalog
 import fr.unice.i3s.dslintegrator.domains.{Domain, Model}
 import scala.collection.immutable.HashMap
@@ -11,15 +10,16 @@ import scala.collection.immutable.HashMap
 object DBPersistence{
   var models = new HashMap[String,DBModel]()
 
-  def addModel(m : DBModel) ={
+  def updateModel(m : DBModel): DBModel ={
     if (models contains m.name)
       models = models - m.name
     models = models + ((m.name,m))
+    m
   }
 }
 
 class DBModel(val name: String, val version: List[Catalog]) extends Model {
-  DBPersistence addModel this
+  DBPersistence updateModel this
   def this(name:String) = {
     this(name,List(new Catalog(name)))
   }

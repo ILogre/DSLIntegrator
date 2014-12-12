@@ -7,10 +7,6 @@ import fr.unice.i3s.dslintegrator.domains.Model
  */
 trait Message
 
-trait MessageFun extends Message{
-  val target : Model
-}
-
 trait Answer extends Message {
   val answer : Any
 }

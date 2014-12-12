@@ -1,6 +1,5 @@
 package fr.unice.i3s.dslintegrator.domains.compovisu.service
 
-import fr.unice.i3s.dslintegrator.Message
 import fr.unice.i3s.dslintegrator.domains.compovisu.mm.Dashboard
 import fr.unice.i3s.dslintegrator.domains.{Domain, Model}
 import scala.collection.immutable.HashMap
@@ -11,10 +10,11 @@ import scala.collection.immutable.HashMap
 object DDPersistence{
   var models = new HashMap[String,DDModel]()
 
-  def updateModel(m : DDModel) ={
+  def updateModel(m : DDModel) : DDModel ={
     if (models contains m.name)
       models = models - m.name
     models = models + ((m.name,m))
+    m
   }
 
 

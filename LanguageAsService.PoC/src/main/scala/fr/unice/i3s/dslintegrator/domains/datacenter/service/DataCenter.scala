@@ -1,7 +1,6 @@
 package fr.unice.i3s.dslintegrator.domains.datacenter.service
 
-import fr.unice.i3s.dslintegrator.{MessageFun, Operation, Service, Message}
-import fr.unice.i3s.dslintegrator.domains.Model
+import fr.unice.i3s.dslintegrator._
 
 /**
  * Created by ivan on 25/11/2014.
@@ -27,16 +26,16 @@ class DataCenter extends Service {
       val model = DBPersistence.models.get(v1.catalogName).get
       val lastCatalog = model.version.head
       val newCatalog = lastCatalog.addResource(v1.uri, v1.semantic, v1.elements: _*)
-      model.append(newCatalog)
+      DBPersistence updateModel model.append(newCatalog)
     }
   }
 
   // Allows one to check the existence of a given resource in a catalog
-  val isDefined = new Function1[addResource, Boolean] with Operation {
-    override def apply(v1: addResource): Boolean = {
+  val isDefined = new Function1[isDefined, isDefinedAnswer] with Operation {
+    override def apply(v1: isDefined): isDefinedAnswer = {
       val model = DBPersistence.models.get(v1.catalogName).get
       val lastCatalog = model.version.head
-      lastCatalog.isDefined(v1.uri)
+      isDefinedAnswer(v1.catalogName,v1.uri,lastCatalog.isDefined(v1.uri))
     }
   }
 }
@@ -48,6 +47,7 @@ object DataCenter extends DataCenter
 
 case class declareDatabase(name : String) extends Message
 
-case class addResource(catalogName : String, uri: String, semantic: String, elements: (String, String)*) extends MessageFun{
-  override val target: Model = DBPersistence.models.get(catalogName).get
-}
+case class addResource(catalogName : String, uri: String, semantic: String, elements: (String, String)*) extends Message
+
+case class isDefined(catalogName : String, uri: String) extends Message
+case class isDefinedAnswer(catalogName : String, uri: String, override val answer: Boolean) extends Answer

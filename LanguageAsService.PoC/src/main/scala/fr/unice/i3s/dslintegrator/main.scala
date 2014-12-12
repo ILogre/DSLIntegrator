@@ -15,12 +15,12 @@ object main extends App{
   // creation of a new dashboard and a new database to work on
   val dashboardDesignModel = new DDModel(ddName)
   val databaseModel = new DBModel(dbName)
-  Engine(link(dashboardDesignModel,databaseModel))
+  Engine(link(dbName,ddName))
 
   // work on the models
-  declareResource_Sample()
-  //declareVisualizationAndLinkExistingData_Sample()
-  declareVisualizationAndLinkUnknownData_Sample()
+  declareResource_Sample
+  //declareVisualizationAndLinkExistingData_Sample
+  declareVisualizationAndLinkUnknownData_Sample
 
 
   def declareResource_Sample() = {
@@ -34,6 +34,7 @@ object main extends App{
     // roles are not suppose to access the history of models, but for debug it's necessary ;)
     val dbUpdated_1 = DBPersistence.models.get(dbName).get.version.head
     println(dbUpdated_1)
+    println(Engine(new getLog(dbName)))
 
   }
 
@@ -48,7 +49,10 @@ object main extends App{
     val ddUpdated_2 = DDPersistence.models.get(ddName).get.version.head
     val dbUpdated_2 = DBPersistence.models.get(dbName).get.version.head
     println(ddUpdated_2)
+    println(Engine(new getLog(ddName)))
+    println(" _- _- _- _- _- _- -_ -_ -_ -_ -_ -_")
     println(dbUpdated_2)
+    println(Engine(new getLog(dbName)))
   }
 
   def declareVisualizationAndLinkUnknownData_Sample() = {
@@ -62,7 +66,11 @@ object main extends App{
     val ddUpdated_2 = DDPersistence.models.get(ddName).get.version.head
     val dbUpdated_2 = DBPersistence.models.get(dbName).get.version.head
     println(ddUpdated_2)
+    println(Engine(new getLog(ddName)))
+    println(" _- _- _- _- _- _- -_ -_ -_ -_ -_ -_")
     println(dbUpdated_2)
+    println(Engine(new getLog(dbName)))
+
   }
 
 }

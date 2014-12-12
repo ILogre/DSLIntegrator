@@ -1,9 +1,7 @@
 package fr.unice.i3s.dslintegrator
 
-import fr.unice.i3s.dslintegrator.domains.Model
 import fr.unice.i3s.dslintegrator.domains.compovisu.mm.Dashboard
-
-import scala.collection.mutable.{ListBuffer, MutableList}
+import scala.collection.mutable.ListBuffer
 
 /**
  * Created by ivan on 09/12/2014.
@@ -38,7 +36,7 @@ private object Association extends Service{
 
   val hasLinked =  new Function1[hasLinked, hasLinkedAnswer] with Operation {
     override def apply(v1: hasLinked): hasLinkedAnswer = {
-      def iterGetLinked(m : Model, l:List[Pair]):Boolean = l match {
+      def iterGetLinked(m : String, l:List[Pair]):Boolean = l match {
         case head::tail => head.contains(m) ||  iterGetLinked(m,tail)
         case _ => false
       }
@@ -49,7 +47,7 @@ private object Association extends Service{
 
   val getLinked = new Function1[getLinked,getLinkedAnswer] {
     override def apply(v1: getLinked): getLinkedAnswer = {
-      def iterGetLinked(m : Model, l:List[Pair]):Model = l match {
+      def iterGetLinked(m : String, l:List[Pair]):String = l match {
         case head::tail =>
           if (head.contains(m))
             head.getPaired(m)
@@ -69,45 +67,45 @@ private object Association extends Service{
   }
 }
 
-class Pair(val model1 : Model,val model2 : Model) {
+class Pair(val id1 : String,val id2 : String) {
 
-  def getPaired(model:Model):Model= model match {
-    case `model1` => model2
-    case `model2` => model1
+  def getPaired(id:String):String= id match {
+    case `id1` => id2
+    case `id2` => id1
     case _ => throw new Exception //todo
   }
 
-  def contains(m : Model ):Boolean = m.equals(model1)||m.equals(model2)
+  def contains(s : String ):Boolean = s.equals(id1)||s.equals(id2)
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[Pair]
 
   override def equals(other: Any): Boolean = other match {
     case that: Pair =>
       (that canEqual this) &&
-        (( model1 == that.model1 &&
-          model2 == that.model2 ) ||
-          ( model1 == that.model2 &&
-            model2 == that.model1 ))
+        (( id1 == that.id1 &&
+          id2 == that.id2 ) ||
+          ( id1 == that.id2 &&
+            id2 == that.id1 ))
     case _ => false
   }
 }
 
-case class link(s1:Model, s2 : Model) extends Message
-case class linkAnswer(s1:Model, s2 : Model, a:Boolean) extends Answer{
+case class link(s1:String, s2 : String) extends Message
+case class linkAnswer(s1:String, s2 : String, a:Boolean) extends Answer{
   override val answer: Boolean = a
 }
 
-case class unlink(s1:Model, s2 : Model) extends Message
-case class unlinkAnswer(s1:Model, s2 : Model, a:Boolean) extends Answer{
+case class unlink(s1:String, s2 : String) extends Message
+case class unlinkAnswer(s1:String, s2 : String, a:Boolean) extends Answer{
   override val answer: Boolean = a
 }
 
-case class hasLinked(s:Model) extends Message
-case class hasLinkedAnswer(s:Model,a:Boolean) extends Answer {
+case class hasLinked(s:String) extends Message
+case class hasLinkedAnswer(s:String,a:Boolean) extends Answer {
   override val answer: Boolean = a
 }
 
-case class getLinked(s:Model) extends Message
-case class getLinkedAnswer(s:Model,a:Model) extends Answer {
-  override val answer: Model = a
+case class getLinked(s:String) extends Message
+case class getLinkedAnswer(s:String,a:String) extends Answer {
+  override val answer: String = a
 }

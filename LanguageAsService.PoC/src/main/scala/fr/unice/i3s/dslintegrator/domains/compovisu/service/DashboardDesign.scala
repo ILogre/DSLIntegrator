@@ -1,7 +1,6 @@
 package fr.unice.i3s.dslintegrator.domains.compovisu.service
 
-import fr.unice.i3s.dslintegrator.{MessageFun, Operation, Service, Message}
-import fr.unice.i3s.dslintegrator.domains.Model
+import fr.unice.i3s.dslintegrator.{Operation, Service, Message}
 
 /**
  * Created by ivan on 25/11/2014.
@@ -25,7 +24,7 @@ import fr.unice.i3s.dslintegrator.domains.Model
     override def apply(v1: addVisu): DDModel = {
       val model = DDPersistence.models.get(v1.dashboardName).get
       val lastDashboard = model.version.head
-      model.append(lastDashboard.addVisu(v1.visuName, v1.concerns: _*))
+      DDPersistence updateModel model.append(lastDashboard.addVisu(v1.visuName, v1.concerns: _*))
     }
   }
 
@@ -38,7 +37,7 @@ import fr.unice.i3s.dslintegrator.domains.Model
       val visu = lastDashboard.getVisuByName(v1.visuName)
       val newVisu = visu.addData(v1.uri, v1.concerns: _*)
       val newDashboard = lastDashboard.removeVisu(visu).addVisu(newVisu)
-      model.append(newDashboard)
+      DDPersistence updateModel model.append(newDashboard)
     }
   }
 }
@@ -50,9 +49,5 @@ object DashboardDesign extends DashboardDesign
 
 case class declareDashboard(name : String) extends Message
 
-case class addVisu(dashboardName : String, visuName: String, concerns: String*) extends MessageFun {
-  override val target: Model = DDPersistence.models.get(dashboardName).get
-}
-case class addData(dashboardName : String, visuName: String, uri: String, concerns: String*) extends MessageFun{
-  override val target: Model = DDPersistence.models.get(dashboardName).get
-}
+case class addVisu(dashboardName : String, visuName: String, concerns: String*) extends Message
+case class addData(dashboardName : String, visuName: String, uri: String, concerns: String*) extends Message

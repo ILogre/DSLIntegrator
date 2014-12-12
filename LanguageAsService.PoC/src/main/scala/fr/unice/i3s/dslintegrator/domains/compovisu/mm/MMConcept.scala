@@ -2,15 +2,15 @@ package fr.unice.i3s.dslintegrator.domains.compovisu.mm
 
 import fr.unice.i3s.dslintegrator.domains.{Domain, MMConcept}
 
-class Dashboard(val name: String, val visus: List[Visualization] = List(), override val log:String = "\n", override val notification:String = "\n") extends MMConcept with Domain{
+class Dashboard(val name: String, val visus: List[Visualization] = List()) extends MMConcept with Domain{
 
   def addVisu(visuName: String, concerns: String*): Dashboard = {
-    new Dashboard(this.name, new Visualization(visuName, concerns.toList)::this.visus, this.log, this.notification)}
+    new Dashboard(this.name, new Visualization(visuName, concerns.toList)::this.visus)}
   def addVisu(visu: Visualization): Dashboard = {
-    new Dashboard(this.name, visu::this.visus,this.log, this.notification)
+    new Dashboard(this.name, visu::this.visus)
   }
   def removeVisu(visu: Visualization): Dashboard = {
-    new Dashboard(this.name, this.visus.drop(this.visus.indexOf(visu)),this.log, this.notification)
+    new Dashboard(this.name, this.visus.drop(this.visus.indexOf(visu)))
   }
   def getVisuByName(name : String): Visualization = {
     def iterGetVisuByName(name : String, visus : List[Visualization] ) : Visualization = {
@@ -24,13 +24,7 @@ class Dashboard(val name: String, val visus: List[Visualization] = List(), overr
   }
 
   override def toString() = {
-    "\nDashboard " + this.name + " { \n\tVisualizations "+visus+"\n}"+log+notification
-  }
-  override def notify(s: String): Dashboard = {
-    new Dashboard(this.name,this.visus, this.log, this.notification+"\n"+s)
-  }
-  override def log(s: String): Dashboard = {
-    new Dashboard(this.name,this.visus, this.log+"\n"+s, this.notification)
+    "\nDashboard " + this.name + " { \n\tVisualizations "+visus+"\n}"
   }
 }
 
