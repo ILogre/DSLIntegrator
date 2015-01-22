@@ -40,8 +40,8 @@ object main extends App{
 
   def declareVisualizationAndLinkExistingData_Sample() = {
     // As a dashboard designer, I fill my dashboard with a new visualization and link it with some data
-    Engine( addVisu(ddName,"myFirstVisu", "Threshold","2D") )
-    Engine( addData(ddName, "myFirstVisu","http://users.polytech.unice.fr/~logre/resources/air_temp.senml","Value") )
+    Engine( addVisu(ddName,"myFirstVisu",Map("Threshold"->Map("limitmin"->17.0, "limitmax"->24.0),"2D"->Map())))
+    Engine( addData(ddName, "myFirstVisu","http://users.polytech.unice.fr/~logre/resources/air_temp.senml",Map("Value"->Map())) )
 
     // Some trace to verify what's going on
     println("Function declareVisualizationAndLinkExistingData_Sample")
@@ -57,8 +57,8 @@ object main extends App{
 
   def declareVisualizationAndLinkUnknownData_Sample() = {
     // As a dashboard designer, I fill my dashboard with a new visualization and link it with some data
-    Engine( addVisu(ddName,"myFirstVisu", "Threshold","2D") )
-    Engine( addData(ddName, "myFirstVisu","http://opendata.paris.fr/api/records/1.0/search?dataset=les-surfaces-boisees","Value") )
+    Engine( addVisu(ddName,"myFirstVisu",Map("Threshold"->Map("limitmin"->17.0, "limitmax"->24.0),"2D"->Map())))
+    Engine( addData(ddName, "myFirstVisu","http://opendata.paris.fr/api/records/1.0/search?dataset=les-surfaces-boisees",Map("Value"->Map())) )
 
     // Some trace to verify what's going on
     println("Function declareVisualizationAndLinkUnknownData_Sample")

@@ -11,6 +11,7 @@ private object Association extends Service{
 
   val link = new Function1[link, linkAnswer] with Operation {
     override def apply(v1: link): linkAnswer = {
+      //TODO s1 is a string, cannot be a Dashboard -> need a way to find out the type of this ID reference
       if ( ! ( v1.s1.isInstanceOf[Dashboard] & v1.s2.isInstanceOf[Dashboard])  ) {
         val p: Pair = new Pair(v1.s1, v1.s2)
         if (!known(p))
@@ -45,7 +46,7 @@ private object Association extends Service{
     }
   }
 
-  val getLinked = new Function1[getLinked,getLinkedAnswer] {
+  val getLinked = new Function1[getLinked,getLinkedAnswer] with Operation  {
     override def apply(v1: getLinked): getLinkedAnswer = {
       def iterGetLinked(m : String, l:List[Pair]):String = l match {
         case head::tail =>
