@@ -1,6 +1,6 @@
 package fr.unice.i3s.dslintegrator
 
-import fr.unice.i3s.dslintegrator.domains.compovisu.service.{DDPersistence, DDModel, addData, addVisu}
+import fr.unice.i3s.dslintegrator.domains.compovisu.service._
 import fr.unice.i3s.dslintegrator.domains.datacenter.service.{DBPersistence, DBModel, addResource}
 
 /**
@@ -20,7 +20,7 @@ object main extends App{
   // work on the models
   declareResource_Sample
   //declareVisualizationAndLinkExistingData_Sample
-  declareVisualizationAndLinkUnknownData_Sample
+  declareVisualizationAndLinkExistingData_Sample
 
 
   def declareResource_Sample() = {
@@ -40,7 +40,8 @@ object main extends App{
 
   def declareVisualizationAndLinkExistingData_Sample() = {
     // As a dashboard designer, I fill my dashboard with a new visualization and link it with some data
-    Engine( addVisu(ddName,"myFirstVisu",Map("Threshold"->Map("limitmin"->17.0, "limitmax"->24.0),"2D"->Map())))
+    Engine( addVisu(ddName,"myFirstVisu",Map("2D"->Map())))
+    Engine( addConcernToVisu(ddName,"myFirstVisu","Threshold", Map("limitmin"->17.0, "limitmax"->24.0)))
     Engine( addData(ddName, "myFirstVisu","http://users.polytech.unice.fr/~logre/resources/air_temp.senml",Map("Value"->Map())) )
 
     // Some trace to verify what's going on
@@ -57,7 +58,8 @@ object main extends App{
 
   def declareVisualizationAndLinkUnknownData_Sample() = {
     // As a dashboard designer, I fill my dashboard with a new visualization and link it with some data
-    Engine( addVisu(ddName,"myFirstVisu",Map("Threshold"->Map("limitmin"->17.0, "limitmax"->24.0),"2D"->Map())))
+    Engine( addVisu(ddName,"myFirstVisu",Map("2D"->Map())))
+    Engine( addConcernToVisu(ddName,"myFirstVisu","Threshold", Map("limitmin"->17.0, "limitmax"->24.0)))
     Engine( addData(ddName, "myFirstVisu","http://opendata.paris.fr/api/records/1.0/search?dataset=les-surfaces-boisees",Map("Value"->Map())) )
 
     // Some trace to verify what's going on
