@@ -38,7 +38,7 @@ class Visualization(val name: String, val concerns: List[Concern], val data: Lis
   //def addData(uri: String): Visualization = new Visualization(this.name, this.concerns, new Data(uri):: this.data)
   def addData(data :Data): Visualization = new Visualization(this.name, this.concerns, data::this.data)
   def addData(uri: String, concerns: Concern*): Visualization = new Visualization(this.name, this.concerns, new Data(uri,concerns.toList):: this.data)
-  def removeData(data: Data): Visualization= new Visualization(this.name, this.concerns, this.data.drop(this.data.indexOf(data)))
+  def removeData(data: Data): Visualization= new Visualization(this.name, this.concerns, this.data.filter(d => d.equals(data)))
 
   override def addConcern(c: Concern): Visualization = new Visualization(this.name, c::this.concerns, this.data)
 
@@ -64,6 +64,20 @@ class Data(val uri: String, val concerns: List[Concern]) extends MMConcept with 
   override def toString() = "Data " + this.uri + " { \n\t\t\t\t Concerns \n\t\t\t\t\t" + concerns +"\n\t\t\t}"
 
   override def addConcern(c: Concern): Data = new Data(this.uri,c::this.concerns)
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[Data]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: Data =>
+      (that canEqual this) &&
+        uri == that.uri
+    case _ => false
+  }
+
+  override def hashCode(): Int = {
+    val state = Seq(uri)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+  }
 }
 
 abstract class Concern(val name : String) extends MMConcept {
