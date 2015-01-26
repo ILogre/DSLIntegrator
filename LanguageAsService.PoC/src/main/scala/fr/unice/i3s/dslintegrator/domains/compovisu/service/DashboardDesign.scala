@@ -47,7 +47,9 @@ import fr.unice.i3s.dslintegrator.{Operation, Service, Message}
         DDPersistence updateModel model.append(lastDashboard.removeVisu(visu).addVisu(visu.addData(v1.uri)))
       else {
         val concernList = v1.concerns map {case (s,m) => concernFactoryHelper(s,m)}
-        DDPersistence updateModel model.append(lastDashboard.removeVisu(visu).addVisu(visu.addData(v1.uri,concernList.toList: _*)))
+        val newVisu = visu.addData(v1.uri,concernList.toList: _*)
+        val newDashboard = lastDashboard.removeVisu(visu).addVisu(newVisu)
+        DDPersistence updateModel model.append(newDashboard)
       }
     }
   }
@@ -95,7 +97,6 @@ import fr.unice.i3s.dslintegrator.{Operation, Service, Message}
     case "Proportion" => Proportion
     case "Value" => Value
     case "Threshold" =>
-      print(params);
       new Threshold(params("limitmin").asInstanceOf[Double], params("limitmax").asInstanceOf[Double])
   }
 }

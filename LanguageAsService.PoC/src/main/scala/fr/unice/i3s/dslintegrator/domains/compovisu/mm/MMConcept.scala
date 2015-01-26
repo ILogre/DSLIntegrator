@@ -10,7 +10,10 @@ class Dashboard(val name: String, val visus: List[Visualization] = List()) exten
     new Dashboard(this.name, visu::this.visus)
   }
   def removeVisu(visu: Visualization): Dashboard = {
-    new Dashboard(this.name, this.visus.drop(this.visus.indexOf(visu)))
+    if(this.visus.contains(visu))
+      new Dashboard(this.name, this.visus.filter(v => !v.equals(visu)))
+    else
+      this
   }
   def getVisuByName(name : String): Visualization = {
     def iterGetVisuByName(name : String, visus : List[Visualization] ) : Visualization = {
@@ -30,7 +33,7 @@ class Dashboard(val name: String, val visus: List[Visualization] = List()) exten
 
 class Visualization(val name: String, val concerns: List[Concern], val data: List[Data] = List()) extends MMConcept with Concerned {
 
-  override def toString() = "\n\tVisu " + this.name + " { \n\t\t Concerns "+concerns+"\n\t\t Data "+data+"\n\t}"
+  override def toString() = "\n\tVisu " + this.name + " { \n\t\t Concerns "+concerns+"\n\t\t Data \n\t\t\t"+data+"\n\t}"
 
   //def addData(uri: String): Visualization = new Visualization(this.name, this.concerns, new Data(uri):: this.data)
   def addData(data :Data): Visualization = new Visualization(this.name, this.concerns, data::this.data)
@@ -38,17 +41,33 @@ class Visualization(val name: String, val concerns: List[Concern], val data: Lis
   def removeData(data: Data): Visualization= new Visualization(this.name, this.concerns, this.data.drop(this.data.indexOf(data)))
 
   override def addConcern(c: Concern): Visualization = new Visualization(this.name, c::this.concerns, this.data)
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[Visualization]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: Visualization =>
+      (that canEqual this) &&
+        name == that.name &&
+        concerns == that.concerns &&
+        data == that.data
+    case _ => false
+  }
+
+  override def hashCode(): Int = {
+    val state = Seq(name, concerns, data)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+  }
 }
 
 class Data(val uri: String, val concerns: List[Concern]) extends MMConcept with Concerned {
   def this(uri: String) = this(uri,List())
-  override def toString() = "\n\tData " + this.uri + " { \n\t\t Concerns " + concerns +"\n\t}"
+  override def toString() = "Data " + this.uri + " { \n\t\t\t\t Concerns \n\t\t\t\t\t" + concerns +"\n\t\t\t}"
 
   override def addConcern(c: Concern): Data = new Data(this.uri,c::this.concerns)
 }
 
 abstract class Concern(val name : String) extends MMConcept {
-  override def toString() = name+"\t"
+  override def toString() = name+" "
 }
 
 class Threshold(val limitmin : Double, val limitmax: Double) extends Concern("Threshold") {}

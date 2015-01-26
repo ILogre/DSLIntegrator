@@ -83,11 +83,13 @@ object BusinessRules {
         val modelLinked = Association.getLinked(new getLinked(c.dashboardName)).answer
         DataCenter addResource new addResource(modelLinked,"newURI","Fictive resource to match a Threshold need", ("t","numerical"),("v","numerical"))
         Engine(new updateLog(c.dashboardName, "Concern Threshold added to " + c.visuName + " : OK\n Resource catalog "+modelLinked+" edited with a resource template to be satisfied \n ---> No global consistency !\n"))
+        Engine(new updateLog(modelLinked, "Catalog edited with a resource template to be satisfied \n ---> No local consistency !"))
       }
       else
         Engine(new updateLog(c.dashboardName, "Concern Threshold added to " + c.visuName + " : OK, but no association detected with a resource catalog \n ---> No integration possible !"))
     }
-    Engine(new updateLog(c.dashboardName, "Concern "+c.concernName+" added to visualization "+c.visuName))
+    else
+      Engine(new updateLog(c.dashboardName, "Concern "+c.concernName+" added to visualization "+c.visuName))
     EmptyAnswer
   }
 

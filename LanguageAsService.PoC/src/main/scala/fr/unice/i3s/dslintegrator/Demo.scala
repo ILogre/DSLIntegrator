@@ -6,7 +6,7 @@ import fr.unice.i3s.dslintegrator.domains.datacenter.service.{DBPersistence, DBM
 /**
  * Created by ivan on 02/12/2014.
  */
-object main extends App{
+object Demo extends App{
 
   // define some names
   val dbName = "db"
@@ -19,8 +19,8 @@ object main extends App{
 
   // work on the models
   declareResource_Sample
-  //declareVisualizationAndLinkExistingData_Sample
   declareVisualizationAndLinkExistingData_Sample
+  //declareVisualizationAndLinkUnknownData_Sample
 
 
   def declareResource_Sample() = {
@@ -41,7 +41,6 @@ object main extends App{
   def declareVisualizationAndLinkExistingData_Sample() = {
     // As a dashboard designer, I fill my dashboard with a new visualization and link it with some data
     Engine( addVisu(ddName,"myFirstVisu",Map("2D"->Map())))
-    Engine( addConcernToVisu(ddName,"myFirstVisu","Threshold", Map("limitmin"->17.0, "limitmax"->24.0)))
     Engine( addData(ddName, "myFirstVisu","http://users.polytech.unice.fr/~logre/resources/air_temp.senml",Map("Value"->Map())) )
 
     // Some trace to verify what's going on
@@ -50,16 +49,15 @@ object main extends App{
     val ddUpdated_2 = DDPersistence.models.get(ddName).get.version.head
     val dbUpdated_2 = DBPersistence.models.get(dbName).get.version.head
     println(ddUpdated_2)
-    println(Engine(new getLog(ddName)))
+    println(Engine(new getLog(ddName)).answer)
     println(" _- _- _- _- _- _- -_ -_ -_ -_ -_ -_")
     println(dbUpdated_2)
-    println(Engine(new getLog(dbName)))
+    println(Engine(new getLog(dbName)).answer)
   }
 
   def declareVisualizationAndLinkUnknownData_Sample() = {
     // As a dashboard designer, I fill my dashboard with a new visualization and link it with some data
     Engine( addVisu(ddName,"myFirstVisu",Map("2D"->Map())))
-    Engine( addConcernToVisu(ddName,"myFirstVisu","Threshold", Map("limitmin"->17.0, "limitmax"->24.0)))
     Engine( addData(ddName, "myFirstVisu","http://opendata.paris.fr/api/records/1.0/search?dataset=les-surfaces-boisees",Map("Value"->Map())) )
 
     // Some trace to verify what's going on
@@ -68,10 +66,10 @@ object main extends App{
     val ddUpdated_2 = DDPersistence.models.get(ddName).get.version.head
     val dbUpdated_2 = DBPersistence.models.get(dbName).get.version.head
     println(ddUpdated_2)
-    println(Engine(new getLog(ddName)))
+    println(Engine(new getLog(ddName)).answer)
     println(" _- _- _- _- _- _- -_ -_ -_ -_ -_ -_")
     println(dbUpdated_2)
-    println(Engine(new getLog(dbName)))
+    println(Engine(new getLog(dbName)).answer)
 
   }
 
